@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html  >
+<head>
+   <title>Document</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../pub/style.css" />
+</head>
+<body>
+   <div class="container">
+        <h1> Home for hbs</h1>
+
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="">Location</label>
+                <input type="text" name="location" id="location" class="form-control" placeholder="Enter your location" aria-describedby="helpId">
+            </div>
+        </form>
+    <form >
+        <p><input type="text" placeholder="Enter location here" name="location" id="location">   </p>
+        <p><button class="btn btn-primary" onclick="getLocation(event)">Submit</button></p>
+    </form>
+    <p>Root Directory: {{root_dir}}</p>
+    <p>Public directory: {{dir}}</p>
+    <p>Bootstrap Dir: {{dir}}\bootstrap\css\bootstrap.min.css</p>
+    
+   </div>
+
+    <script src='/js/loc.js'> </script>
+    <script >
+
+        //alert('Outside loc.js alert')
+
+       // const getLocation = (e)=>{
+        //    e.preventDefault();
+            
+           // alert('welcome Inside Function')
+            // location=document.getElementById("location")
+            // alert(location.innerHTML)
+       // };
+
+
+    </script>
+</body>
+</html>
