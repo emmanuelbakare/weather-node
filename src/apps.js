@@ -1,28 +1,71 @@
-const request= require('request')
-const chalk=require('chalk')
-const fs=require('fs')
+const geocode = require('./utils/geocode');
+const forecast = require('./utils/forecast');
+const express = require('express');
+const hbs = require('hbs');
+const path = require('path');
 
-const url="http://api.weatherstack.com/current?access_key=242c3dc8da9a4df907b5d91d79cd8903&query=45,-75&unit=f"
+const app = express();
 
-var poster=[]
-request({url:url }, (error, response, body)=>{ 
-     const data=JSON.parse(body)
+const pub_dir = path.join(__dirname, '/pub');
+app.use(express.static(pub_dir))
 
-    console.log('temperator today is',chalk.blue(data.current.temperature),'decree and there is ', chalk.blue(data.current.feelslike+'%'),' chance of raining today');
-        //console.log(post.current);
-  
 
+
+app.set('view engine', 'hbs')
+app.set('views','./src/views')
+
+app.get('', (req, resp)=>{
+    resp.render('index',{
+        name:"deji",
+        title:"Manager",
+        root_dir:__dirname,
+        pub_dir,
+
+
+    })
 })
 
+app.get('/forecast',(req, resp)=>{
+    geocode("london", (error,geodata)=>{
+        // console.log(data)
+        // forecast( geodata.latitude,geodata.longitude, (error, {temperature, fellslike}={})=>{
+        forecast( geodata.latitude,geodata.longitude, (error, forecast={})=>{
 
-const geocodeURL= "https://api.mapbox.com/geocoding/v5/mapbox.places/Los%20Angeles.json?access_token=pk.eyJ1IjoiaW50ZXJmYWNlY29ubmVjdCIsImEiOiJja2R5YmxyYTMweDF6MnNveDl0bnF5YnFpIn0.CIHmVrtLtU5cMIXKhxiKbA&limit=1"
+            // const result= geodata.location+': temperature today is'+temperature+'decree and there is '+fellslike+'%'+' chance of raining today'
+            resp.render('forecast',{
+                geodata,
+                forecast,
+            })
+     
+        }) 
+    }) 
+})
 
-request({url:geocodeURL}, (error,resp,JSONbody)=>{
-   body= JSON.parse(JSONbody)
-   const longitude=body.features[0].center[0]
-   const latitude=body.features[0].center[1]
-   console.log(" Longitude : ",longitude," Latitude : "+latitude);
+app.get('/weather', (req, resp)=>{
    
-   // console.log(body.features);
+    const address = req.query.address;
+   
+    if(!address){
+        return resp.send("You have to enter an address")
+    }
+    geocode(address, (error,geodata)=>{
+            forecast( geodata.latitude,geodata.longitude, (error, forecast={})=>{
+                resp.send({
+                    geodata,
+                    forecast,
+                })
+         
+            }) 
+        }) 
+    
 })
+
+const port=process.env.PORT || 3000
+
+app.listen(port,()=>{
+    console.log('Server runs on port', port)
+})
+ 
+
+
 
