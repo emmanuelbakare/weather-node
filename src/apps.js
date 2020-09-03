@@ -11,7 +11,10 @@ app.use(express.static(pub_dir))
 
 
 
-app.set('view engine', 'hbs')
+// app.set('view engine', 'hbs')
+app.set('view engine', 'html');
+app.engine('html', require('hbs').__express);
+
 app.set('views','./src/views')
 
 app.get('', (req, resp)=>{

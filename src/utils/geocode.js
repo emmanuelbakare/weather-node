@@ -1,5 +1,4 @@
 const request = require('request');
-const chalk = require('chalk');
 
 
 const geocode=(address,callback)=>{
@@ -12,7 +11,6 @@ const geocode=(address,callback)=>{
         } else if (JSON.parse(body).features.length < 1 ){
             var bodyObj=JSON.parse(body)
             callback(undefined, "Location "+chalk.blue(bodyObj.query[0])+" Does not exist")
-            // callback(undefined,"There is an error - features: "+bodyObj.toString())
 
         } 
         else {
@@ -28,8 +26,5 @@ const geocode=(address,callback)=>{
     });
 }
 
-// geocode("kano444", (error,data)=>{
-//     console.log(data);
-// }) 
 
 module.exports = geocode
